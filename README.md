@@ -8,7 +8,7 @@ To use testcontainers-specs2 in an existing SBT project with Scala 2.11 or a lat
 `build.sbt`:
 
 ```scala
-libraryDependencies += "io.chrisdavenport" %% "testcontainers-specs2" % "<version>"
+libraryDependencies += "io.chrisdavenport" %% "testcontainers-specs2" % "<version>" % Test
 ```
 
 ## Examples
