@@ -7,7 +7,6 @@ lazy val core = project.in(file("."))
 val specs2V = "4.1.0"
 val testcontainersSV = "0.17.0"
 
-
 lazy val contributors = Seq(
   "ChristopherDavenport" -> "Christopher Davenport"
 )
@@ -23,6 +22,7 @@ lazy val commonSettings = Seq(
   libraryDependencies ++= Seq(
     "org.specs2"                  %% "specs2-core"                % specs2V,
     "com.dimafeng"                %% "testcontainers-scala"       % testcontainersSV
+      exclude("org.scalatest", "scalatest")
   )
 )
 
