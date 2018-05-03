@@ -7,3 +7,6 @@ scala:
 
 jdk:
   - oraclejdk8
+
+after_success:
+- test $TRAVIS_PULL_REQUEST == "false" && test $TRAVIS_BRANCH == "master" && test $TRAVIS_REPO_SLUG == "ChristopherDavenport/testcontainers-specs2" && sbt ++$TRAVIS_SCALA_VERSION publish
