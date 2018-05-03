@@ -23,6 +23,7 @@ import java.time.Duration
 import java.time.temporal.ChronoUnit.SECONDS
 import org.specs2.mutable.Specification
 import io.chrisdavenport.testcontainersspecs2.ForAllTestContainer
+import org.flywaydb.core.Flyway
 
 class MigrationsSpec extends Specification with ForAllTestContainer {
   // IMPORTANT: MUST BE LAZY VAL
@@ -75,6 +76,7 @@ import doobie.implicits._
 import doobie.specs2._
 import io.chrisdavenport.testcontainersspecs2.ForAllTestContainer
 import org.specs2.mutable.Specification
+import org.flywaydb.core.Flyway
 
 class IODoobieQueriesSpec extends QueriesSpec[IO] {
   // Using this instead of IOAnalysisMatchers to avoid uninitialized field error
