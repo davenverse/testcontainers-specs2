@@ -48,7 +48,6 @@ trait QueriesSpec[F[_]] extends Specification with Checker[F] with ForAllTestCon
   override def afterStart(): Unit = {
     lazy val flyway = new Flyway
     flyway.setDataSource(multiple.jdbcUrl, dbUserName, dbPassword)
-    flyway.setLocations("classpath:db/banno_all_migrations")
     flyway.migrate()
     ()
   }
