@@ -18,6 +18,7 @@ libraryDependencies += "io.chrisdavenport" %% "testcontainers-specs2" % "<versio
 ```scala
 import com.dimafeng.testcontainers._
 import org.testcontainers.containers.wait._
+import org.testcontainers.containers.wait.strategy.LogMessageWaitStrategy
 import cats.effect.IO
 import java.time.Duration
 import java.time.temporal.ChronoUnit.SECONDS
@@ -68,7 +69,7 @@ Common Use Case which has a tricky inheritance component to define
 ```scala
 import cats.effect._
 import com.dimafeng.testcontainers._
-import org.testcontainers.containers.wait._
+import org.testcontainers.containers.wait.strategy.LogMessageWaitStrategy
 import java.time.Duration
 import java.time.temporal.ChronoUnit.SECONDS
 import doobie._
@@ -124,6 +125,7 @@ trait QueriesSpec[F[_]] extends Specification with Checker[F] with ForAllTestCon
     flyway.setDataSource(jdbcUrl, dbUserName, dbPassword)
     flyway.setLocations("classpath:db/migration")
     flyway.migrate()
+    ()
   }
 
   check(sql"SELECT 1".query[Int])
