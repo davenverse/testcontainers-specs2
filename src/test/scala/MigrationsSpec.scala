@@ -1,6 +1,7 @@
 package io.chrisdavenport.testcontainersspecs2
 
 import cats.effect.IO
+import cats.implicits._
 import org.specs2.mutable.Specification
 import org.flywaydb.core.Flyway
 // import io.chrisdavenport.testcontainersspecs2.{ ForAllTestContainer, PostgresqlMultipleDatabases }
@@ -27,10 +28,10 @@ class MigrationsSpec extends Specification with ForAllTestContainer {
     IO {
       lazy val flyway = new Flyway
       flyway.setDataSource(jdbcUrl, dbUserName, dbPassword)
-      flyway.setLocations("classpath:test_postgres_migrations")
       flyway.migrate()
       ()
     }.attempt
+      .flatTap(e => IO(println(e))) // TODO: REMOVE
       .map(_.isRight)
       .unsafeRunSync() must_=== (true)
   }

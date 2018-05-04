@@ -31,7 +31,7 @@ final class PostgresqlMultipleDatabases(
   exposedPort: Int,
   dbName: String,
   dbUserName: String,
-  dbPassword: String,
+  dbPassword: String
 ){
 
   lazy val container: GenericContainer = GenericContainer(

@@ -29,6 +29,7 @@ lazy val commonSettings = Seq(
     "org.specs2"                  %% "specs2-core"                % specs2V,
     "org.tpolecat"                %% "doobie-core"                % doobieV % Test,
     "org.tpolecat"                %% "doobie-specs2"              % doobieV % Test,
+    "org.tpolecat"                %% "doobie-postgres"            % doobieV % Test,
     "com.dimafeng"                %% "testcontainers-scala"       % testcontainersSV
       exclude("org.scalatest", "scalatest")
   )

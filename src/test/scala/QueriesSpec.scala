@@ -3,9 +3,11 @@ package io.chrisdavenport.testcontainersspecs2
 import cats.effect._
 import doobie._
 import doobie.implicits._
+import doobie.postgres.implicits._
 import doobie.specs2._
 import org.flywaydb.core.Flyway
 import org.specs2.mutable.Specification
+import java.util.UUID
 
 class IODoobieQueriesSpec extends QueriesSpec[IO] {
   // Using this instead of IOAnalysisMatchers to avoid uninitialized field error
@@ -51,6 +53,9 @@ trait QueriesSpec[F[_]] extends Specification with Checker[F] with ForAllTestCon
     ()
   }
 
+  private case class Person(person_id: UUID, firstName: String, lastName: String)
+
   check(sql"SELECT 1".query[Int])
+  check(sql"SELECT person_id, first_name, last_name FROM persons".query[Person])
 
 }
