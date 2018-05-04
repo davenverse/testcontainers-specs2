@@ -16,49 +16,38 @@ libraryDependencies += "io.chrisdavenport" %% "testcontainers-specs2" % "<versio
 ### Migrations
 
 ```scala
-import com.dimafeng.testcontainers._
-import org.testcontainers.containers.wait._
-import org.testcontainers.containers.wait.strategy.LogMessageWaitStrategy
 import cats.effect.IO
-import java.time.Duration
-import java.time.temporal.ChronoUnit.SECONDS
 import org.specs2.mutable.Specification
-import io.chrisdavenport.testcontainersspecs2.ForAllTestContainer
 import org.flywaydb.core.Flyway
+import io.chrisdavenport.testcontainersspecs2.{ ForAllTestContainer, PostgresqlMultipleDatabases }
 
-class MigrationsSpec extends Specification with ForAllTestContainer {
-  // IMPORTANT: MUST BE LAZY VAL
-  override lazy val container = GenericContainer(
-    "christopherdavenport/postgres-multi-db:10.3",
-    exposedPorts = Seq(5432),
-    env = Map(
-      "REPO" -> "https://github.com/mrts/docker-postgresql-multiple-databases",
-      "POSTGRES_USER" -> dbUserName,
-      "POSTGRES_PASSWORD" ->  dbPassword,
-      "POSTGRES_MULTIPLE_DATABASES"  -> dbName
-    ),
-    waitStrategy = new LogMessageWaitStrategy()
-      .withRegEx(".*database system is ready to accept connections.*\\s")
-      .withTimes(2)
-      .withStartupTimeout(Duration.of(60, SECONDS))
+class MigrationsSpec extends Specification with ForAllTestContainer   {
+  private[this] val multiple = new PostgresqlMultipleDatabases(
+    name = "christopherdavenport/postgres-multi-db:10.3",
+    exposedPort = 5432,
+    dbName = dbName,
+    dbUserName = dbUserName,
+    dbPassword = dbPassword
   )
+
+  // IMPORTANT: MUST BE LAZY VAL
+  override lazy val container = multiple.container
+
   lazy val driverName = "org.postgresql.Driver"
-  lazy val jdbcUrl = s"jdbc:postgresql://${container.container.getContainerIpAddress()}:${container.container.getMappedPort(5432)}/${dbName}"
   lazy val dbUserName = "user"
   lazy val dbPassword = "password"
   lazy val dbName = "db"
 
-  "Migrations" should {
-    "runCorrectly" in {
-      IO{
-        lazy val flyway = new Flyway
-        flyway.setDataSource(jdbcUrl, dbUserName, dbPassword)
-        flyway.setLocations("classpath:db/migration")
-        flyway.migrate()
-      }.attempt
-        .map(_.isRight)
-        .unsafeRunSync() must_===(true)
-    }
+  "Migrations should run Correctly" in {
+    IO {
+      lazy val flyway = new Flyway
+      flyway.setDataSource(multiple.jdbcUrl, dbUserName, dbPassword)
+      flyway.setLocations("classpath:test_postgres_migrations")
+      flyway.migrate()
+      ()
+    }.attempt
+      .map(_.isRight)
+      .unsafeRunSync() must_=== (true)
   }
 ```
 
@@ -69,9 +58,6 @@ Common Use Case which has a tricky inheritance component to define
 ```scala
 import cats.effect._
 import com.dimafeng.testcontainers._
-import org.testcontainers.containers.wait.strategy.LogMessageWaitStrategy
-import java.time.Duration
-import java.time.temporal.ChronoUnit.SECONDS
 import doobie._
 import doobie.implicits._
 import doobie.specs2._
@@ -87,21 +73,17 @@ class IODoobieQueriesSpec extends QueriesSpec[IO] {
 trait QueriesSpec[F[_]] extends Specification with Checker[F] with ForAllTestContainer {
   sequential
 
-  // IMPORTANT: MUST BE LAZY VAL
-  override lazy val container = GenericContainer(
-    "christopherdavenport/postgres-multi-db:10.3",
-    exposedPorts = Seq(5432),
-    env = Map(
-      "REPO" -> "https://github.com/mrts/docker-postgresql-multiple-databases",
-      "POSTGRES_USER" -> dbUserName,
-      "POSTGRES_PASSWORD" ->  dbPassword,
-      "POSTGRES_MULTIPLE_DATABASES"  -> dbName
-    ),
-    waitStrategy = new LogMessageWaitStrategy()
-      .withRegEx(".*database system is ready to accept connections.*\\s")
-      .withTimes(2)
-      .withStartupTimeout(Duration.of(60, SECONDS))
+  private[this] val multiple = new PostgresqlMultipleDatabases(
+    name = "christopherdavenport/postgres-multi-db:10.3",
+    exposedPort = 5432,
+    dbName = dbName,
+    dbUserName = dbUserName,
+    dbPassword = dbPassword
   )
+
+  // IMPORTANT: MUST BE LAZY VAL
+  override lazy val container = multiple.container
+
   lazy val driverName = "org.postgresql.Driver"
   lazy val jdbcUrl = s"jdbc:postgresql://${container.container.getContainerIpAddress()}:${container.container.getMappedPort(5432)}/${dbName}"
   lazy val dbUserName = "user"
