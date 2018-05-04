@@ -8,6 +8,7 @@ val specs2V = "4.1.0"
 val testcontainersSV = "0.17.0"
 
 lazy val contributors = Seq(
+  "aeons"                -> "Bjørn Madsen",
   "ChristopherDavenport" -> "Christopher Davenport"
 )
 
