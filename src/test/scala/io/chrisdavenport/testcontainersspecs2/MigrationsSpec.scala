@@ -1,7 +1,6 @@
 package io.chrisdavenport.testcontainersspecs2
 
 import cats.effect.IO
-import cats.implicits._
 import org.specs2.mutable.Specification
 import org.flywaydb.core.Flyway
 // import io.chrisdavenport.testcontainersspecs2.{ ForAllTestContainer, PostgresqlMultipleDatabases }
@@ -31,7 +30,6 @@ class MigrationsSpec extends Specification with ForAllTestContainer {
       flyway.migrate()
       ()
     }.attempt
-      .flatTap(e => IO(println(e))) // TODO: REMOVE
       .map(_.isRight)
       .unsafeRunSync() must_=== (true)
   }
