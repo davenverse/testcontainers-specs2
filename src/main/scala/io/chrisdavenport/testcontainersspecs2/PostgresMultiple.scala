@@ -14,7 +14,7 @@ trait UsesPostgresqlMultipleDatabases { self: { def container: Container } =>
     name = "christopherdavenport/postgres-multi-db:10.3",
     exposedPort = 5432,
     dbName = dbName,
-    dbUserName = dbUserName,
+    dbLoginName = dbUserName,
     dbPassword = dbPassword
   )
 
@@ -27,11 +27,11 @@ trait UsesPostgresqlMultipleDatabases { self: { def container: Container } =>
 }
 
 final class PostgresqlMultipleDatabases(
-  name: String,
-  exposedPort: Int,
-  dbName: String,
-  dbUserName: String,
-  dbPassword: String
+     name: String,
+     exposedPort: Int,
+     dbName: String,
+     dbLoginName: String,
+     dbPassword: String
 ){
 
   lazy val container: GenericContainer = GenericContainer(
@@ -39,7 +39,7 @@ final class PostgresqlMultipleDatabases(
     exposedPorts = Seq(exposedPort),
     env = Map(
       "REPO" -> "https://github.com/mrts/docker-postgresql-multiple-databases",
-      "POSTGRES_USER" -> dbUserName,
+      "POSTGRES_USER" -> dbLoginName,
       "POSTGRES_PASSWORD" ->  dbPassword,
       "POSTGRES_MULTIPLE_DATABASES"  -> dbName
     ),
@@ -51,5 +51,6 @@ final class PostgresqlMultipleDatabases(
 
   lazy val ipAddress = container.containerIpAddress
   lazy val mappedPort = container.mappedPort(exposedPort)
-  lazy val jdbcUrl: String = s"jdbc:postgresql://$ipAddress:$mappedPort/$dbName"
+  val subIx = dbName.indexOf('@')
+  lazy val jdbcUrl: String = s"jdbc:postgresql://$ipAddress:$mappedPort/${if (-1 == subIx) dbName else dbName.substring(subIx+1)}"
 }

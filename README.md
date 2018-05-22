@@ -21,28 +21,29 @@ import org.specs2.mutable.Specification
 import org.flywaydb.core.Flyway
 import io.chrisdavenport.testcontainersspecs2.{ ForAllTestContainer, PostgresqlMultipleDatabases }
 
-class MigrationsSpec extends Specification with ForAllTestContainer   {
+class MigrationsSpec extends Specification with ForAllTestContainer {
+
   private[this] val multiple = new PostgresqlMultipleDatabases(
     name = "christopherdavenport/postgres-multi-db:10.3",
     exposedPort = 5432,
     dbName = dbName,
-    dbUserName = dbUserName,
+    dbLoginName = dbLogin,
     dbPassword = dbPassword
   )
-
   // IMPORTANT: MUST BE LAZY VAL
   override lazy val container = multiple.container
 
   lazy val driverName = "org.postgresql.Driver"
-  lazy val dbUserName = "user"
+  lazy val dbLogin = "user"
   lazy val dbPassword = "password"
+  // optionally "dbuser@dbname" if the container supports it
   lazy val dbName = "db"
+  lazy val jdbcUrl = multiple.jdbcUrl
 
   "Migrations should run Correctly" in {
     IO {
       lazy val flyway = new Flyway
-      flyway.setDataSource(multiple.jdbcUrl, dbUserName, dbPassword)
-      flyway.setLocations("classpath:test_postgres_migrations")
+      flyway.setDataSource(jdbcUrl, dbLogin, dbPassword)
       flyway.migrate()
       ()
     }.attempt
@@ -71,13 +72,12 @@ class IODoobieQueriesSpec extends QueriesSpec[IO] {
 }
 
 trait QueriesSpec[F[_]] extends Specification with Checker[F] with ForAllTestContainer {
-  sequential
 
   private[this] val multiple = new PostgresqlMultipleDatabases(
     name = "christopherdavenport/postgres-multi-db:10.3",
     exposedPort = 5432,
     dbName = dbName,
-    dbUserName = dbUserName,
+    dbLoginName = dbLogin,
     dbPassword = dbPassword
   )
 
@@ -85,27 +85,27 @@ trait QueriesSpec[F[_]] extends Specification with Checker[F] with ForAllTestCon
   override lazy val container = multiple.container
 
   lazy val driverName = "org.postgresql.Driver"
-  lazy val jdbcUrl = s"jdbc:postgresql://${container.container.getContainerIpAddress()}:${container.container.getMappedPort(5432)}/${dbName}"
-  lazy val dbUserName = "user"
+  lazy val dbLogin = "user"
   lazy val dbPassword = "password"
+  // optionally "dbuser@dbname" if the container supports it
   lazy val dbName = "db"
 
   // This thing is a bit screwy
   lazy val transactor = Transactor.fromDriverManager[F](
     driverName,
-    jdbcUrl,
-    dbUserName,
+    multiple.jdbcUrl,
+    dbLogin,
     dbPassword
   )
 
+  sequential
+
   // afterStart / beforeStop available for actions at the begininning
   // and end of a particular container session.
-  // In this case we make sure migrations have run before
-  // we check the sql statements.
+  // In this case we make sure migrations have run before we check the sql statements.
   override def afterStart(): Unit = {
     lazy val flyway = new Flyway
-    flyway.setDataSource(jdbcUrl, dbUserName, dbPassword)
-    flyway.setLocations("classpath:db/migration")
+    flyway.setDataSource(multiple.jdbcUrl, dbLogin, dbPassword)
     flyway.migrate()
     ()
   }
