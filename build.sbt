@@ -4,16 +4,21 @@ lazy val core = project.in(file("."))
       name := "testcontainers-specs2"
     )
 
-val catsEffectV = "1.0.0-RC"
-val doobieV = "0.5.1"
-val flyWayV = "5.0.7"
+val catsEffectV = "0.10.1"
+val doobieV = "0.5.3"
+val flyWayV = "5.1.0"
 val specs2V = "4.2.0"
-val testcontainersSV = "0.17.0"
+val testcontainersSV = "0.18.0"
 
 lazy val contributors = Seq(
   "aeons"                -> "Bjørn Madsen",
   "ChristopherDavenport" -> "Christopher Davenport"
 )
+
+// check for library updates whenever the project is [re]load
+onLoad in Global := { s =>
+  "dependencyUpdates" :: s
+}
 
 lazy val commonSettings = Seq(
   organization := "io.chrisdavenport",
@@ -21,7 +26,7 @@ lazy val commonSettings = Seq(
   scalaVersion := "2.12.6",
   crossScalaVersions := Seq(scalaVersion.value, "2.11.12"),
 
-  addCompilerPlugin("org.spire-math" % "kind-projector" % "0.9.6" cross CrossVersion.binary),
+  addCompilerPlugin("org.spire-math" % "kind-projector" % "0.9.7" cross CrossVersion.binary),
 
   libraryDependencies ++= Seq(
     "org.typelevel"               %% "cats-effect"                % catsEffectV % Test,
