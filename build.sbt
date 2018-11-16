@@ -8,7 +8,7 @@ val catsEffectV = "0.10.1"
 val doobieV = "0.5.3"
 val flyWayV = "5.2.1"
 val specs2V = "4.3.5"
-val testcontainersSV = "0.18.0"
+val testcontainersSV = "0.22.0"
 
 lazy val contributors = Seq(
   "aeons"                -> "Bjørn Madsen",
@@ -23,7 +23,7 @@ onLoad in Global := { s =>
 lazy val commonSettings = Seq(
   organization := "io.chrisdavenport",
 
-  scalaVersion := "2.12.6",
+  scalaVersion := "2.12.7",
   crossScalaVersions := Seq(scalaVersion.value, "2.11.12"),
 
   addCompilerPlugin("org.spire-math" % "kind-projector" % "0.9.8" cross CrossVersion.binary),
