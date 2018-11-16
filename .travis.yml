@@ -3,7 +3,7 @@ language: scala
 services:
   - docker
 scala:
-  - 2.12.4
+  - 2.12.7
   - 2.11.12
 
 jdk:
