@@ -1,6 +1,7 @@
-sudo: false
+sudo: true
 language: scala
-
+services:
+  - docker
 scala:
   - 2.12.7
   - 2.11.12
