@@ -46,9 +46,11 @@ trait QueriesSpec[F[_]] extends Specification with Checker[F] with ForAllTestCon
   // and end of a particular container session.
   // In this case we make sure migrations have run before we check the sql statements.
   override def afterStart(): Unit = {
-    lazy val flyway = new Flyway
-    flyway.setDataSource(multiple.jdbcUrl, dbUserName, dbPassword)
-    flyway.migrate()
+    Flyway
+        .configure()
+        .dataSource(multiple.jdbcUrl, dbUserName, dbPassword)
+        .load()
+        .migrate
     ()
   }
 

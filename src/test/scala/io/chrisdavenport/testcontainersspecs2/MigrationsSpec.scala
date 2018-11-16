@@ -25,10 +25,11 @@ class MigrationsSpec extends Specification with ForAllTestContainer {
 
   "Migrations should run Correctly" in {
     IO {
-      lazy val flyway = new Flyway
-      flyway.setDataSource(jdbcUrl, dbUserName, dbPassword)
-      flyway.migrate()
-      ()
+      Flyway
+        .configure()
+        .dataSource(jdbcUrl, dbUserName, dbPassword)
+        .load()
+        .migrate
     }.attempt
       .map(_.isRight)
       .unsafeRunSync() must_=== (true)
