@@ -10,11 +10,14 @@ import org.specs2.mutable.Specification
 import java.util.UUID
 
 class IODoobieQueriesSpec extends QueriesSpec[IO] {
+  implicit val CS: ContextShift[IO] = IO.contextShift(scala.concurrent.ExecutionContext.global)
   // Using this instead of IOAnalysisMatchers to avoid uninitialized field error
   override implicit val M: Effect[IO] = IO.ioConcurrentEffect
 }
 
 trait QueriesSpec[F[_]] extends Specification with Checker[F] with ForAllTestContainer {
+
+  implicit val CS: ContextShift[F]
 
   private[this] val multiple = new PostgresqlMultipleDatabases(
     name = "christopherdavenport/postgres-multi-db:10.3",

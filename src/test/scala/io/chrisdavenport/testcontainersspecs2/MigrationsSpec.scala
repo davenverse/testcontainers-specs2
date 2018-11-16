@@ -1,11 +1,13 @@
 package io.chrisdavenport.testcontainersspecs2
 
-import cats.effect.IO
+import cats.effect._
 import org.specs2.mutable.Specification
 import org.flywaydb.core.Flyway
 // import io.chrisdavenport.testcontainersspecs2.{ ForAllTestContainer, PostgresqlMultipleDatabases }
 
 class MigrationsSpec extends Specification with ForAllTestContainer {
+
+  implicit val CS: ContextShift[IO] = IO.contextShift(scala.concurrent.ExecutionContext.global)
 
   private[this] val multiple = new PostgresqlMultipleDatabases(
     name = "christopherdavenport/postgres-multi-db:10.3",
