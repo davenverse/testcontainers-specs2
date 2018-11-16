@@ -6,7 +6,7 @@ lazy val core = project.in(file("."))
 
 val catsEffectV = "0.10.1"
 val doobieV = "0.5.3"
-val flyWayV = "5.1.4"
+val flyWayV = "5.2.1"
 val specs2V = "4.3.5"
 val testcontainersSV = "0.18.0"
 
@@ -29,14 +29,14 @@ lazy val commonSettings = Seq(
   addCompilerPlugin("org.spire-math" % "kind-projector" % "0.9.8" cross CrossVersion.binary),
 
   libraryDependencies ++= Seq(
+    "org.specs2"                  %% "specs2-core"                % specs2V,
+    "com.dimafeng"                %% "testcontainers-scala"       % testcontainersSV
+      exclude("org.scalatest", "scalatest"),
     "org.typelevel"               %% "cats-effect"                % catsEffectV % Test,
     "org.flywaydb"                %  "flyway-core"                % flyWayV % Test,
-    "org.specs2"                  %% "specs2-core"                % specs2V,
     "org.tpolecat"                %% "doobie-core"                % doobieV % Test,
     "org.tpolecat"                %% "doobie-specs2"              % doobieV % Test,
-    "org.tpolecat"                %% "doobie-postgres"            % doobieV % Test,
-    "com.dimafeng"                %% "testcontainers-scala"       % testcontainersSV
-      exclude("org.scalatest", "scalatest")
+    "org.tpolecat"                %% "doobie-postgres"            % doobieV % Test
   )
 )
 
