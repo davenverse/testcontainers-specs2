@@ -4,8 +4,8 @@ lazy val core = project.in(file("."))
       name := "testcontainers-specs2"
     )
 
-val catsEffectV = "0.10.1"
-val doobieV = "0.5.3"
+val catsEffectV = "1.0.0"
+val doobieV = "0.6.0"
 val flyWayV = "5.2.1"
 val specs2V = "4.3.5"
 val testcontainersSV = "0.22.0"
