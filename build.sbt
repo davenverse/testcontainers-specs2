@@ -8,7 +8,7 @@ val catsEffectV = "1.2.0"
 val doobieV = "0.6.0"
 val flyWayV = "5.2.4"
 val specs2V = "4.4.1"
-val testcontainersSV = "0.22.0"
+val testcontainersSV = "0.23.0"
 
 lazy val contributors = Seq(
   "aeons"                -> "Bjørn Madsen",
