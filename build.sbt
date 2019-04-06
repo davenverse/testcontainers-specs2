@@ -26,7 +26,7 @@ lazy val commonSettings = Seq(
   scalaVersion := "2.12.7",
   crossScalaVersions := Seq(scalaVersion.value, "2.11.12"),
 
-  addCompilerPlugin("org.spire-math" % "kind-projector" % "0.9.9" cross CrossVersion.binary),
+  addCompilerPlugin("org.spire-math" % "kind-projector" % "0.9.10" cross CrossVersion.binary),
 
   libraryDependencies ++= Seq(
     "org.specs2"                  %% "specs2-core"                % specs2V,
