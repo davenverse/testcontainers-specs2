@@ -1,16 +1,18 @@
 package io.chrisdavenport.testcontainersspecs2
 
-import com.dimafeng.testcontainers.{ Container, GenericContainer }
-import org.testcontainers.containers.wait.strategy.LogMessageWaitStrategy
 import java.time.Duration
 import java.time.temporal.ChronoUnit.SECONDS
 
-/** A mix-in trait, which can be used with ForAllTestContainer or ForEachTestContainer,
+import com.dimafeng.testcontainers.{Container, GenericContainer}
+import org.testcontainers.containers.wait.strategy.LogMessageWaitStrategy
+
+/**
+  * A mix-in trait, which can be used with ForAllTestContainer or ForEachTestContainer,
   * that uses a container based on https://github.com/mrts/docker-postgresql-multiple-databases
   */
-trait UsesPostgresqlMultipleDatabases { self: { def container: Container } =>
+trait UsesPostgresqlMultipleDatabases {
 
-  override lazy val container = new PostgresqlMultipleDatabases(
+  private[this] val multiple = new PostgresqlMultipleDatabases(
     name = "christopherdavenport/postgres-multi-db:10.3",
     exposedPort = 5432,
     dbName = dbName,
@@ -18,11 +20,13 @@ trait UsesPostgresqlMultipleDatabases { self: { def container: Container } =>
     dbPassword = dbPassword
   )
 
-  lazy val driverName = "org.postgresql.Driver"
-  lazy val dbUserName = "user"
-  lazy val dbPassword = "password"
-  lazy val dbName = "db"
-  lazy val jdbcUrl = container.jdbcUrl
+  lazy val container: Container = multiple.container
+
+  lazy val driverName: String = "org.postgresql.Driver"
+  lazy val dbUserName: String = "user"
+  lazy val dbPassword: String = "password"
+  lazy val dbName: String = "db"
+  lazy val jdbcUrl: String = multiple.jdbcUrl
 
 }
 
