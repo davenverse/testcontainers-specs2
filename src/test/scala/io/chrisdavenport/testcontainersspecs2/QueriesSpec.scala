@@ -10,22 +10,17 @@ import doobie.specs2._
 import org.flywaydb.core.Flyway
 import org.specs2.mutable.Specification
 
-class IODoobieQueriesSpec extends QueriesSpec[IO] {
-  implicit val CS: ContextShift[IO] = IO.contextShift(scala.concurrent.ExecutionContext.global)
-  // Using this instead of IOAnalysisMatchers to avoid uninitialized field error
-  override implicit val M: Effect[IO] = IO.ioConcurrentEffect
-}
+import scala.concurrent.ExecutionContext
 
-trait QueriesSpec[F[_]]
+class QueriesSpec[F[_]]
     extends Specification
-    with Checker[F]
+    with IOChecker
     with ForAllTestContainer
     with UsesPostgreSQLMultipleDatabases {
 
-  implicit val CS: ContextShift[F]
+  implicit val CS: ContextShift[IO] = IO.contextShift(ExecutionContext.global)
 
-  // This thing is a bit screwy
-  lazy val transactor: Transactor[F] = Transactor.fromDriverManager[F](
+  override lazy val transactor: Transactor[IO] = Transactor.fromDriverManager[IO](
     driverName,
     jdbcUrl,
     dbUserName,
