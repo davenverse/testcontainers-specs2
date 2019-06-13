@@ -10,9 +10,9 @@ import org.testcontainers.containers.wait.strategy.LogMessageWaitStrategy
   * A mix-in trait, which can be used with ForAllTestContainer or ForEachTestContainer,
   * that uses a container based on https://github.com/mrts/docker-postgresql-multiple-databases
   */
-trait UsesPostgresqlMultipleDatabases {
+trait UsesPostgreSQLMultipleDatabases {
 
-  private[this] val multiple = new PostgresqlMultipleDatabases(
+  private[this] val multiple = new PostgreSQLMultipleDatabases(
     name = "christopherdavenport/postgres-multi-db:10.3",
     exposedPort = 5432,
     dbName = dbName,
@@ -30,7 +30,7 @@ trait UsesPostgresqlMultipleDatabases {
 
 }
 
-final class PostgresqlMultipleDatabases(
+final class PostgreSQLMultipleDatabases(
   name: String,
   exposedPort: Int,
   dbName: String,

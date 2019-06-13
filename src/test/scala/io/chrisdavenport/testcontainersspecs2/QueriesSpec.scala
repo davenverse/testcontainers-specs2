@@ -20,7 +20,7 @@ trait QueriesSpec[F[_]]
     extends Specification
     with Checker[F]
     with ForAllTestContainer
-    with UsesPostgresqlMultipleDatabases {
+    with UsesPostgreSQLMultipleDatabases {
 
   implicit val CS: ContextShift[F]
 

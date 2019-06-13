@@ -7,7 +7,7 @@ import org.specs2.mutable.Specification
 class MigrationsSpec
     extends Specification
     with ForAllTestContainer
-    with UsesPostgresqlMultipleDatabases {
+    with UsesPostgreSQLMultipleDatabases {
 
   "Migrations should run Correctly" in {
     IO {
