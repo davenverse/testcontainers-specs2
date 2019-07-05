@@ -1,5 +1,7 @@
 package io.chrisdavenport.testcontainersspecs2
 
+import java.util.UUID
+
 import cats.effect._
 import doobie._
 import doobie.implicits._
@@ -7,38 +9,20 @@ import doobie.postgres.implicits._
 import doobie.specs2._
 import org.flywaydb.core.Flyway
 import org.specs2.mutable.Specification
-import java.util.UUID
 
-class IODoobieQueriesSpec extends QueriesSpec[IO] {
-  implicit val CS: ContextShift[IO] = IO.contextShift(scala.concurrent.ExecutionContext.global)
-  // Using this instead of IOAnalysisMatchers to avoid uninitialized field error
-  override implicit val M: Effect[IO] = IO.ioConcurrentEffect
-}
+import scala.concurrent.ExecutionContext
 
-trait QueriesSpec[F[_]] extends Specification with Checker[F] with ForAllTestContainer {
+class QueriesSpec[F[_]]
+    extends Specification
+    with IOChecker
+    with ForAllTestContainer
+    with UsesPostgreSQLMultipleDatabases {
 
-  implicit val CS: ContextShift[F]
+  implicit val CS: ContextShift[IO] = IO.contextShift(ExecutionContext.global)
 
-  private[this] val multiple = new PostgresqlMultipleDatabases(
-    name = "christopherdavenport/postgres-multi-db:10.3",
-    exposedPort = 5432,
-    dbName = dbName,
-    dbUserName = dbUserName,
-    dbPassword = dbPassword
-  )
-
-  // IMPORTANT: MUST BE LAZY VAL
-  override lazy val container = multiple.container
-
-  lazy val driverName = "org.postgresql.Driver"
-  lazy val dbUserName = "user"
-  lazy val dbPassword = "password"
-  lazy val dbName = "db"
-
-  // This thing is a bit screwy
-  lazy val transactor = Transactor.fromDriverManager[F](
+  override lazy val transactor: Transactor[IO] = Transactor.fromDriverManager[IO](
     driverName,
-    multiple.jdbcUrl,
+    jdbcUrl,
     dbUserName,
     dbPassword
   )
@@ -50,10 +34,10 @@ trait QueriesSpec[F[_]] extends Specification with Checker[F] with ForAllTestCon
   // In this case we make sure migrations have run before we check the sql statements.
   override def afterStart(): Unit = {
     Flyway
-        .configure()
-        .dataSource(multiple.jdbcUrl, dbUserName, dbPassword)
-        .load()
-        .migrate
+      .configure()
+      .dataSource(jdbcUrl, dbUserName, dbPassword)
+      .load()
+      .migrate
     ()
   }
 
