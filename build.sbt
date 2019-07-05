@@ -4,11 +4,11 @@ lazy val core = project.in(file("."))
       name := "testcontainers-specs2"
     )
 
-val catsEffectV = "1.3.1"
-val doobieV = "0.7.0"
-val flyWayV = "5.2.4"
-val specs2V = "4.6.0"
-val testcontainersSV = "0.26.0"
+val catsEffectV = "2.0.0-M4"    //https://github.com/typelevel/cats-effect/releases
+val doobieV = "0.8.0-M1"        //https://github.com/tpolecat/doobie/releases
+val flyWayV = "5.2.4"           //https://github.com/flyway/flyway/releases
+val specs2V = "4.6.0"           //https://github.com/etorreborre/specs2/releases
+val testcontainersSV = "0.26.0" //https://github.com/testcontainers/testcontainers-scala/releases
 
 lazy val contributors = Seq(
   "aeons"                -> "Bjørn Madsen",
@@ -23,10 +23,10 @@ onLoad in Global := { s =>
 lazy val commonSettings = Seq(
   organization := "io.chrisdavenport",
 
-  scalaVersion := "2.12.7",
-  crossScalaVersions := Seq(scalaVersion.value, "2.11.12"),
+  scalaVersion := "2.13.0",
+  crossScalaVersions := Seq(scalaVersion.value, "2.12.8", "2.11.12"),
 
-  addCompilerPlugin("org.spire-math" % "kind-projector" % "0.9.10" cross CrossVersion.binary),
+  addCompilerPlugin("org.typelevel" % "kind-projector" % "0.10.3" cross CrossVersion.binary),
 
   libraryDependencies ++= Seq(
     "org.specs2"                  %% "specs2-core"                % specs2V,
@@ -143,9 +143,9 @@ lazy val mimaSettings = {
   lazy val extraVersions: Set[String] = Set()
 
   Seq(
-    mimaFailOnProblem := mimaVersions(version.value).toList.headOption.isDefined,
+    mimaFailOnProblem := mimaVersions(version.value).toList.nonEmpty,
     mimaPreviousArtifacts := (mimaVersions(version.value) ++ extraVersions)
-      .filterNot(excludedVersions.contains(_))
+      .filterNot(excludedVersions.contains)
       .map{v => 
         val moduleN = moduleName.value + "_" + scalaBinaryVersion.value.toString
         organization.value % moduleN % v
@@ -160,8 +160,8 @@ lazy val mimaSettings = {
 
 lazy val skipOnPublishSettings = Seq(
   skip in publish := true,
-  publish := (()),
-  publishLocal := (()),
+  publish := (),
+  publishLocal := (),
   publishArtifact := false,
   publishTo := None
 )
