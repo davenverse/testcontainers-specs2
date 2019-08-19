@@ -27,6 +27,8 @@ trait UsesPostgreSQLMultipleDatabases {
   lazy val dbPassword: String = "password"
   lazy val dbName: String = "db"
   lazy val jdbcUrl: String = multiple.jdbcUrl
+  lazy val ipAddress: String = multiple.ipAddress
+  lazy val port: String = multiple.mappedPort
 
   final class PostgreSQLMultipleDatabases(
       name: String,
