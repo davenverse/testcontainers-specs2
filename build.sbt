@@ -6,7 +6,7 @@ lazy val core = project.in(file("."))
 
 val catsEffectV = "2.0.0-RC2"    //https://github.com/typelevel/cats-effect/releases
 val doobieV = "0.8.0-RC1"        //https://github.com/tpolecat/doobie/releases
-val flyWayV = "6.0.1"           //https://github.com/flyway/flyway/releases
+val flyWayV = "6.0.2"           //https://github.com/flyway/flyway/releases
 val specs2V = "4.7.0"           //https://github.com/etorreborre/specs2/releases
 val testcontainersSV = "0.26.0" //https://github.com/testcontainers/testcontainers-scala/releases
 
