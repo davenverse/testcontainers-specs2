@@ -12,7 +12,7 @@ import org.testcontainers.containers.wait.strategy.LogMessageWaitStrategy
  */
 trait UsesPostgreSQLMultipleDatabases {
 
-  private[this] val multiple = new PostgreSQLMultipleDatabases(
+  private[this] lazy val multiple = new PostgreSQLMultipleDatabases(
     name = "christopherdavenport/postgres-multi-db:10.3",
     exposedPort = 5432,
     dbName = dbName,
