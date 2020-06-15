@@ -4,7 +4,7 @@ Integration for testing components with docker.
 
 ## Quick Start
 
-To use testcontainers-specs2 in an existing SBT project with Scala 2.11 or a later version, add the following dependency to your
+To use testcontainers-specs2 in an existing SBT project with Scala 2.12 or a later version, add the following dependency to your
 `build.sbt`:
 
 ```scala
