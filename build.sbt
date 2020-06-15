@@ -4,29 +4,24 @@ lazy val core = project.in(file("."))
       name := "testcontainers-specs2"
     )
 
-val catsEffectV = "2.0.0"    //https://github.com/typelevel/cats-effect/releases
-val doobieV = "0.8.0-RC1"        //https://github.com/tpolecat/doobie/releases
-val flyWayV = "6.0.4"           //https://github.com/flyway/flyway/releases
-val specs2V = "4.7.1"           //https://github.com/etorreborre/specs2/releases
-val testcontainersSV = "0.26.0" //https://github.com/testcontainers/testcontainers-scala/releases
+val catsEffectV = "2.1.3"    //https://github.com/typelevel/cats-effect/releases
+val doobieV = "0.9.0"        //https://github.com/tpolecat/doobie/releases
+val flyWayV = "6.4.4"           //https://github.com/flyway/flyway/releases
+val specs2V = "4.9.4"           //https://github.com/etorreborre/specs2/releases
+val testcontainersSV = "0.37.0" //https://github.com/testcontainers/testcontainers-scala/releases
 
 lazy val contributors = Seq(
   "aeons"                -> "Bjørn Madsen",
   "ChristopherDavenport" -> "Christopher Davenport"
 )
 
-// check for library updates whenever the project is [re]load
-onLoad in Global := { s =>
-  "dependencyUpdates" :: s
-}
-
 lazy val commonSettings = Seq(
   organization := "io.chrisdavenport",
 
-  scalaVersion := "2.13.0",
-  crossScalaVersions := Seq(scalaVersion.value, "2.12.8", "2.11.12"),
+  scalaVersion := "2.13.1",
+  crossScalaVersions := Seq(scalaVersion.value, "2.12.10"),
 
-  addCompilerPlugin("org.typelevel" % "kind-projector" % "0.10.3" cross CrossVersion.binary),
+  addCompilerPlugin("org.typelevel" %% "kind-projector" % "0.11.0" cross CrossVersion.full),
 
   libraryDependencies ++= Seq(
     "org.specs2"                  %% "specs2-core"                % specs2V,
@@ -157,12 +152,3 @@ lazy val mimaSettings = {
     }
   )
 }
-
-lazy val skipOnPublishSettings = Seq(
-  skip in publish := true,
-  publish := (),
-  publishLocal := (),
-  publishArtifact := false,
-  publishTo := None
-)
-
