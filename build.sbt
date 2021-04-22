@@ -8,7 +8,7 @@ val catsEffectV = "2.1.3"    //https://github.com/typelevel/cats-effect/releases
 val doobieV = "0.9.0"        //https://github.com/tpolecat/doobie/releases
 val flyWayV = "6.4.4"           //https://github.com/flyway/flyway/releases
 val specs2V = "4.10.5"           //https://github.com/etorreborre/specs2/releases
-val testcontainersSV = "0.38.4" //https://github.com/testcontainers/testcontainers-scala/releases
+val testcontainersSV = "0.39.3" //https://github.com/testcontainers/testcontainers-scala/releases
 
 lazy val contributors = Seq(
   "aeons"                -> "Bjørn Madsen",
