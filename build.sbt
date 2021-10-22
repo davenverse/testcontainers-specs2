@@ -7,8 +7,8 @@ lazy val core = project.in(file("."))
 val catsEffectV = "2.1.3"    //https://github.com/typelevel/cats-effect/releases
 val doobieV = "0.9.0"        //https://github.com/tpolecat/doobie/releases
 val flyWayV = "6.4.4"           //https://github.com/flyway/flyway/releases
-val specs2V = "4.10.6"           //https://github.com/etorreborre/specs2/releases
-val testcontainersSV = "0.39.3" //https://github.com/testcontainers/testcontainers-scala/releases
+val specs2V = "4.10.5"           //https://github.com/etorreborre/specs2/releases
+val testcontainersSV = "0.39.9" //https://github.com/testcontainers/testcontainers-scala/releases
 
 lazy val contributors = Seq(
   "aeons"                -> "Bjørn Madsen",
@@ -17,7 +17,7 @@ lazy val contributors = Seq(
 
 lazy val commonSettings = Seq(
   scalaVersion := "2.13.1",
-  crossScalaVersions := Seq(scalaVersion.value, "2.12.10"),
+  crossScalaVersions := Seq(scalaVersion.value, "2.12.15"),
 
   addCompilerPlugin("org.typelevel" %% "kind-projector" % "0.11.0" cross CrossVersion.full),
 
