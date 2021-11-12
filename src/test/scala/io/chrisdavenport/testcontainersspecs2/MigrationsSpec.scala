@@ -3,6 +3,7 @@ package io.chrisdavenport.testcontainersspecs2
 import cats.effect._
 import org.flywaydb.core.Flyway
 import org.specs2.mutable.Specification
+import cats.effect.unsafe.implicits.global
 
 class MigrationsSpec
     extends Specification
