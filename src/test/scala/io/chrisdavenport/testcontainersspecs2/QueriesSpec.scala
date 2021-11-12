@@ -9,16 +9,13 @@ import doobie.postgres.implicits._
 import doobie.specs2._
 import org.flywaydb.core.Flyway
 import org.specs2.mutable.Specification
-
-import scala.concurrent.ExecutionContext
+import cats.effect.unsafe.implicits.global
 
 class QueriesSpec[F[_]]
     extends Specification
     with IOChecker
     with ForAllTestContainer
     with UsesPostgreSQLMultipleDatabases {
-
-  implicit val CS: ContextShift[IO] = IO.contextShift(ExecutionContext.global)
 
   override lazy val transactor: Transactor[IO] = Transactor.fromDriverManager[IO](
     driverName,

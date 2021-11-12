@@ -1,14 +1,15 @@
-lazy val core = project.in(file("."))
-    .settings(commonSettings)
-    .settings(
-      name := "testcontainers-specs2"
-    )
+lazy val core = project
+  .in(file("."))
+  .settings(commonSettings)
+  .settings(
+    name := "testcontainers-specs2"
+  )
 
-val catsEffectV = "2.1.3"    //https://github.com/typelevel/cats-effect/releases
-val doobieV = "0.9.0"        //https://github.com/tpolecat/doobie/releases
-val flyWayV = "6.4.4"           //https://github.com/flyway/flyway/releases
-val specs2V = "4.10.5"           //https://github.com/etorreborre/specs2/releases
-val testcontainersSV = "0.39.9" //https://github.com/testcontainers/testcontainers-scala/releases
+val catsEffectV = "3.2.9"        //https://github.com/typelevel/cats-effect/releases
+val doobieV = "1.0.0-RC1"        //https://github.com/tpolecat/doobie/releases
+val flyWayV = "8.0.4"            //https://github.com/flyway/flyway/releases
+val specs2V = "4.13.0"           //https://github.com/etorreborre/specs2/releases
+val testcontainersSV = "0.39.11" //https://github.com/testcontainers/testcontainers-scala/releases
 
 lazy val contributors = Seq(
   "aeons"                -> "Bjørn Madsen",
@@ -16,20 +17,17 @@ lazy val contributors = Seq(
 )
 
 lazy val commonSettings = Seq(
-  scalaVersion := "2.13.1",
+  scalaVersion := "2.13.7",
   crossScalaVersions := Seq(scalaVersion.value, "2.12.15"),
-
-  addCompilerPlugin("org.typelevel" %% "kind-projector" % "0.11.0" cross CrossVersion.full),
-
   libraryDependencies ++= Seq(
-    "org.specs2"                  %% "specs2-core"                % specs2V,
-    "com.dimafeng"                %% "testcontainers-scala"       % testcontainersSV
+    "org.specs2"    %% "specs2-core"          % specs2V,
+    "com.dimafeng"  %% "testcontainers-scala" % testcontainersSV
       exclude("org.scalatest", "scalatest"),
-    "org.typelevel"               %% "cats-effect"                % catsEffectV % Test,
-    "org.flywaydb"                %  "flyway-core"                % flyWayV % Test,
-    "org.tpolecat"                %% "doobie-core"                % doobieV % Test,
-    "org.tpolecat"                %% "doobie-specs2"              % doobieV % Test,
-    "org.tpolecat"                %% "doobie-postgres"            % doobieV % Test
+    "org.typelevel" %% "cats-effect"          % catsEffectV % Test,
+    "org.flywaydb"  %  "flyway-core"          % flyWayV     % Test,
+    "org.tpolecat"  %% "doobie-core"          % doobieV     % Test,
+    "org.tpolecat"  %% "doobie-specs2"        % doobieV     % Test,
+    "org.tpolecat"  %% "doobie-postgres"      % doobieV     % Test
   )
 )
 
@@ -46,12 +44,12 @@ inThisBuild(
     homepage := Some(url("https://github.com/ChristopherDavenport/testcontainers-specs2")),
     licenses += ("MIT", url("http://opensource.org/licenses/MIT")),
     pomIncludeRepository := { _ => false },
-    scalacOptions in (Compile, doc) ++= Seq(
+    Compile / doc / scalacOptions ++= Seq(
       "-groups",
       "-sourcepath",
-      (baseDirectory in LocalRootProject).value.getAbsolutePath,
+      (LocalRootProject / baseDirectory).value.getAbsolutePath,
       "-doc-source-url",
       "https://github.com/ChristopherDavenport/testcontainers-specs2/blob/v" + version.value + "€{FILE_PATH}.scala"
-    )
+    ),
+    Global / excludeLintKeys ++= Set(scalacOptions, pomIncludeRepository)
   ))
-
