@@ -19,7 +19,7 @@ lazy val commonSettings = Seq(
   scalaVersion := "2.13.8",
   crossScalaVersions := Seq(scalaVersion.value, "2.12.15"),
 
-  addCompilerPlugin("org.typelevel" %% "kind-projector" % "0.11.0" cross CrossVersion.full),
+  addCompilerPlugin("org.typelevel" %% "kind-projector" % "0.13.2" cross CrossVersion.full),
 
   libraryDependencies ++= Seq(
     "org.specs2"                  %% "specs2-core"                % specs2V,
