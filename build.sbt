@@ -46,10 +46,10 @@ inThisBuild(
     homepage := Some(url("https://github.com/ChristopherDavenport/testcontainers-specs2")),
     licenses += ("MIT", url("http://opensource.org/licenses/MIT")),
     pomIncludeRepository := { _ => false },
-    scalacOptions in (Compile, doc) ++= Seq(
+    (Compile / doc / scalacOptions) ++= Seq(
       "-groups",
       "-sourcepath",
-      (baseDirectory in LocalRootProject).value.getAbsolutePath,
+      (LocalRootProject / baseDirectory).value.getAbsolutePath,
       "-doc-source-url",
       "https://github.com/ChristopherDavenport/testcontainers-specs2/blob/v" + version.value + "€{FILE_PATH}.scala"
     )
